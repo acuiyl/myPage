@@ -6,15 +6,28 @@
     <title>acui's page</title>
     <style>
       body {
+        padding: 50px;
         background-color: #fdf8e4;
       }
       h1 {
         text-align: center;
         color: #6667ab;
       }
+      .timer_box {
+        text-align: center;
+      }
     </style>
   </head>
   <body>
     <h1>welcome to my page！</h1>
+    <div class="timer_box"></div>
   </body>
 </html>
+<script>
+  const timer_box = document.querySelector(".timer_box")
+  setInterval(() => {
+    const timer_string =
+      new Date().toDateString() + " " + new Date().toLocaleTimeString()
+    timer_box.innerHTML = timer_string
+  })
+</script>
