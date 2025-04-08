@@ -70,11 +70,44 @@
         #output {
             color: #c3e6ab;
         }
+        .space{
+          width: 10vw;
+          height: 100%;
+        }
+        .container{
+          display: flex;
+          justify-content: space-between;
+          padding: 10vw;
+        }
+        .toggle_button_container{
+          text-align: right;
+          width: 100%;
+          padding: 2vw;
+        }
+        .toggle_button_container .toggle_button
+        {
+          font-weight: 700;
+          border-radius: 5px;
+          border:1px solid #bad1d5;
+          background-color:#3d6472 ;
+          color:  #ddd;
+        }
+        .hide { 
+          display: none;
+        }
     </style>
 </head>
 
 <body>
+  <div class="toggle_button_container">
+    <button class="toggle_button">切换单/双月</button>
+  </div>
+  <div class="container">
+
     <table id="calendar"></table>
+    <div class="space"></div>
+    <table id="calendar_1"></table>
+  </div>
 
     <script>
 
@@ -120,9 +153,9 @@
 
             // 表头
             const caption = document.createElement('caption');
-            caption.textContent = `${year}年${month}月 - `;
+            caption.textContent = `${this.year}年${this.month}月 - `;
             const output = document.createElement('span')
-            output.id = 'output'
+            output.id = `output_${this.month}`
             caption.appendChild(output)
             this.parent.appendChild(caption);
             const thead = document.createElement('thead');
@@ -176,8 +209,8 @@
 
                         input.type = 'time'; // 输入框类型改为 time
                         input.value = ''; // 默认为空
-                        if (storedData[year][month] && storedData[year][month][index]) {
-                            input.value = storedData[year][month][index]
+                        if (storedData[this.year][this.month] && storedData[this.year][this.month][index]) {
+                            input.value = storedData[this.year][this.month][index]
                         }
                         input.dataset.index = index; // 存储索引信息
                         td.innerHTML = `<span>${date}</span><br>`;
@@ -230,7 +263,7 @@
 
                 const dateArray = Object.values(this.storedData[this.year][this.month])
                 const finalResult = calcTime(dateArray)
-                document.querySelector('#output').innerHTML = `<span>${finalResult}</span>`
+                document.querySelector(`#output_${this.month}`).innerHTML = `<span>${finalResult}</span>`
                 return finalResult;
             } else {
                 return 0
@@ -250,8 +283,16 @@
         const year = today.getFullYear();
         const month = today.getMonth() + 1; // 月份从0开始
         const storedData = JSON.parse(localStorage.getItem('calendarData')) || { [year]: { [month]: {} } };
-        let calendar = new Calendar(year, month, storedData, document.getElementById("calendar"));
+        let calendar = new Calendar(year, (month - 1), storedData, document.getElementById("calendar"));
+        let calendar_1 = new Calendar(year, month, storedData, document.getElementById("calendar_1"));
 
+        const space = document.querySelector('.space')
+        const calendar_dom =  document.getElementById("calendar")
+        const toggle_button = document.querySelector('.toggle_button')
+        toggle_button.addEventListener('click',()=>{
+          calendar_dom.classList.toggle('hide')
+          space.classList.toggle('hide')
+        })
 
 
     </script>
